@@ -181,6 +181,11 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
+	_date\
+	_time\
+	_usertimetest\
+	_systimetest\
+	_realtimetest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

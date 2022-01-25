@@ -103,6 +103,11 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_date(void);
+extern int sys_time(void);
+extern int sys_usertimetest(void);
+extern int sys_systimetest(void);
+extern int sys_realtimetest(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -126,17 +131,29 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_date]    sys_date,
+[SYS_time]    sys_time,
+[SYS_usertimetest] sys_usertimetest,
+[SYS_systimetest]  sys_systimetest,
+[SYS_realtimetest] sys_realtimetest,
 };
+
+extern int sysTime;
 
 void
 syscall(void)
 {
   int num;
   struct proc *curproc = myproc();
+  int sysStartTime, sysEndTime;
 
   num = curproc->tf->eax;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    sysStartTime = ticks;
     curproc->tf->eax = syscalls[num]();
+    sysEndTime = ticks;
+    if (num != 3) sysTime += sysEndTime - sysStartTime;
+    
   } else {
     cprintf("%d %s: unknown sys call %d\n",
             curproc->pid, curproc->name, num);
