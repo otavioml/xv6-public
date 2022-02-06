@@ -110,7 +110,7 @@ trap(struct trapframe *tf)
   if(myproc() && myproc()->state == RUNNING){
 
        myproc()->exec_time++;
-       if (myproc()->exec_time > myproc()->expected_exec_time){
+       if (myproc()->exec_time >= myproc()->expected_exec_time){
          yield();
        }
        else{

@@ -7,6 +7,16 @@
 #include "proc.h"
 #include "spinlock.h"
 
+unsigned short lfsr = 0xACE1u; 
+unsigned bit; 
+
+unsigned rand() 
+{ 
+  bit  = ((lfsr >> 0) ^ (lfsr >> 2) ^ (lfsr >> 3) ^ (lfsr >> 5) ) & 1; 
+  return lfsr =  (lfsr >> 1) | (bit << 15); 
+} 
+
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -319,11 +329,17 @@ void recalcExecutionTime(void){
 
   acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    sum_prioity += p->priority;
+    if (p->state == 4){
+
+      sum_prioity += p->priority;
+    }
   }
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    p->expected_exec_time = (int) ((p->priority / (double) sum_prioity) * 1000);
+    if (p->state == 4){
+
+      p->expected_exec_time = (int) ((p->priority / (double) sum_prioity) * 100);
+    }
   }
   release(&ptable.lock);
 
@@ -337,7 +353,7 @@ void printProcessTable(void){
 
   acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if (p->state != 2 && p->state != 0){
+    if (p->state == 4){
 
       cprintf("\t%d\t\t%d\t\t%d\t\t%d\n", p->pid, p->priority, p->state, p->expected_exec_time);
     }
@@ -373,6 +389,7 @@ scheduler(void)
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
+      p->priority = (rand() % 10) + 1;
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
