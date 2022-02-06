@@ -6,7 +6,7 @@ int
 main(int argc, char *argv[])
 {
 
-  for (int i = 0; i < 10; i++){
+  for (int i = 0; i < 10000; i++){
     sleep(1);
   }
 

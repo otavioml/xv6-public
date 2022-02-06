@@ -23,7 +23,7 @@ int
 main(int argc, char *argv[])
 {
   
-  int sysTimeStart = time();
+  // int sysTimeStart = time();
   int startTicks = uptime();
   int pid = fork();
 
@@ -41,19 +41,24 @@ main(int argc, char *argv[])
     }
   }
 
-  int sysTimeEnd = time();
+  // int sysTimeEnd = time();
   int endTicks = uptime();
 
   int realTime = (endTicks - startTicks)*10;
-  int sysTime = (sysTimeEnd - sysTimeStart)*10;
-  int userTime = realTime - sysTime;
+  // int sysTime = (sysTimeEnd - sysTimeStart)*10;
+  // int userTime = realTime - sysTime;
 
-  printf(stdout, "real ");
+  // Removing every print used in the previous time execution from tp1
+
+  // printf(stdout, "real ");
+  // printTimeMilisecondsPrecision(realTime);
+  // printf(stdout, "user ");
+  // printTimeMilisecondsPrecision(userTime);
+  // printf(stdout, "sys ");
+  // printTimeMilisecondsPrecision(sysTime);
+
+  printf(stdout, "Tempo de execução do processo %d: ", pid);
   printTimeMilisecondsPrecision(realTime);
-  printf(stdout, "user ");
-  printTimeMilisecondsPrecision(userTime);
-  printf(stdout, "sys ");
-  printTimeMilisecondsPrecision(sysTime);
   
   exit();
   

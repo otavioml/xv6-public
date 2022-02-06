@@ -88,6 +88,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->priority = 1;
 
   release(&ptable.lock);
 
@@ -309,6 +310,39 @@ wait(void)
     // Wait for children to exit.  (See wakeup1 call in proc_exit.)
     sleep(curproc, &ptable.lock);  //DOC: wait-sleep
   }
+}
+
+void recalcExecutionTime(void){
+
+  struct proc *p;
+  int sum_prioity = 0;
+
+  acquire(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    sum_prioity += p->priority;
+  }
+
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    p->expected_exec_time = (int) ((p->priority / (double) sum_prioity) * 1000);
+  }
+  release(&ptable.lock);
+
+}
+
+void printProcessTable(void){
+
+  struct proc *p;
+
+  cprintf("Processos\tPrioridade\tEstado do processo\tExec esperada\n");
+
+  acquire(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->state != 2 && p->state != 0){
+
+      cprintf("\t%d\t\t%d\t\t%d\t\t%d\n", p->pid, p->priority, p->state, p->expected_exec_time);
+    }
+  }
+  release(&ptable.lock);
 }
 
 //PAGEBREAK: 42

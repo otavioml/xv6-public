@@ -17,7 +17,7 @@ main(int argc, char *argv[])
   }
 
   for (int i = 0; i < 99999; i++){
-    for (int j = 0; j < 100; j++){
+    for (int j = 0; j < 9999; j++){
       x += pi*pi;
     }
   }
