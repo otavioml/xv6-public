@@ -186,6 +186,7 @@ UPROGS=\
 	_usertimetest\
 	_systimetest\
 	_realtimetest\
+	_setprio\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

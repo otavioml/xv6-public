@@ -25,3 +25,4 @@
 #define SYS_usertimetest 24
 #define SYS_systimetest  25
 #define SYS_realtimetest 26
+#define SYS_setprio      27

@@ -114,6 +114,7 @@ void            pinit(void);
 void            procdump(void);
 void            recalcExecutionTime(void);
 void            printProcessTable(void);
+int            setprio(int pid, int priority);
 void            scheduler(void) __attribute__((noreturn));
 void            sched(void);
 void            setproc(struct proc*);

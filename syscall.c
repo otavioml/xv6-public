@@ -108,6 +108,7 @@ extern int sys_time(void);
 extern int sys_usertimetest(void);
 extern int sys_systimetest(void);
 extern int sys_realtimetest(void);
+extern int sys_setprio(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -136,6 +137,7 @@ static int (*syscalls[])(void) = {
 [SYS_usertimetest] sys_usertimetest,
 [SYS_systimetest]  sys_systimetest,
 [SYS_realtimetest] sys_realtimetest,
+[SYS_setprio] sys_setprio
 };
 
 extern int sysTime;

@@ -332,14 +332,14 @@ void recalcExecutionTime(void){
   int sum_prioity = 0;
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if (p->state == 4){
+    if (p->pid != 0){
 
       sum_prioity += p->priority;
     }
   }
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if (p->state == 4){
+    if (p->pid != 0){
       p->expected_exec_time = ((float)p->priority / (float)sum_prioity) * 1000;
     }
   }
@@ -355,12 +355,30 @@ void printProcessTable(void){
 
   acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if (p->state == 4){
+    if (p->pid != 0){
 
       cprintf("\t%d\t\t%d\t\t%d\t\t%d\n", p->pid, p->priority, p->state, p->expected_exec_time);
     }
   }
   release(&ptable.lock);
+}
+
+int
+setprio(int pid, int priority)
+{
+  struct proc *p;
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->pid == pid){
+      p->priority = priority;
+    }
+  }
+
+  release(&ptable.lock);
+
+  return pid;
+  
 }
 
 //PAGEBREAK: 42

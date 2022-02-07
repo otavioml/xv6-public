@@ -117,3 +117,13 @@ int sys_realtimetest(void){
   return 0;
 }
 
+int sys_setprio(void)
+{
+  //getting values from argint as sys_sleep method
+  int pid, priority;
+  if (argint(0, &pid) < 0)
+    return -1;
+  if (argint(1, &priority) < 0)
+    return -1;
+  return setprio(pid, priority);
+}

@@ -28,6 +28,7 @@ int time(void);
 int usertimetest(void);
 int systimetest(void);
 int realtimetest(void);
+int setprio(int, int);
 
 // ulib.c
 int stat(const char*, struct stat*);
