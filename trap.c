@@ -53,8 +53,8 @@ trap(struct trapframe *tf)
       ticks++;
 
       if (ticks % 1000 == 0){
-        printProcessTable();
         recalcExecutionTime();
+        printProcessTable();
       }
       wakeup(&ticks);
       release(&tickslock);

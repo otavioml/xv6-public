@@ -100,6 +100,8 @@ found:
   p->pid = nextpid++;
   p->priority = 1;
 
+  cprintf("Iniciando %d com prioridade %d.\n", p->pid, p->priority);
+
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -324,10 +326,11 @@ wait(void)
 
 void recalcExecutionTime(void){
 
+  acquire(&ptable.lock);
+
   struct proc *p;
   int sum_prioity = 0;
 
-  acquire(&ptable.lock);
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if (p->state == 4){
 
@@ -337,8 +340,7 @@ void recalcExecutionTime(void){
 
   for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if (p->state == 4){
-
-      p->expected_exec_time = (int) ((p->priority / (double) sum_prioity) * 100);
+      p->expected_exec_time = ((float)p->priority / (float)sum_prioity) * 1000;
     }
   }
   release(&ptable.lock);
@@ -389,7 +391,6 @@ scheduler(void)
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
-      p->priority = (rand() % 10) + 1;
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
