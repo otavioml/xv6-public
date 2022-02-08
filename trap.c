@@ -113,9 +113,6 @@ trap(struct trapframe *tf)
        if (myproc()->exec_time >= myproc()->expected_exec_time){
          yield();
        }
-       else{
-        yield();
-       }
        
      }
     
